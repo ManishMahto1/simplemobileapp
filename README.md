@@ -1,97 +1,328 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# React Native Posts App
 
-# Getting Started
+A production-ready React Native application demonstrating best practices for mobile app development with posts browsing, search functionality, and pagination.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+##  Features
 
-## Step 1: Start Metro
+- **Browse Posts**: View a list of posts fetched from JSONPlaceholder API
+- **Search**: Real-time search with debouncing
+- **Pagination**: Infinite scroll with load more functionality
+- **User Profiles**: View detailed user information
+- **Post Details**: Read full post content and author information
+- **Data Persistence**: Posts and users cached locally for offline access
+- **Lifecycle Management**: Proper handling of app states (active, background, killed)
+- **Pull to Refresh**: Refresh data with swipe-down gesture
+- **Smooth Performance**: Optimized FlatList rendering
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+##  Technical Stack
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **React Native CLI** 
+- **TypeScript** for type safety
+- **Redux Toolkit** for state management
+- **Redux Persist** for data persistence
+- **React Navigation** for navigation
+- **AsyncStorage** for local storage
+- **Functional Components** with React Hooks
+- **No third-party UI libraries** (pure React Native components)
 
-```sh
-# Using npm
-npm start
+##  Project Structure
 
-# OR using Yarn
-yarn start
+```
+myApp/
+├── android/                    # Android native code
+├── ios/                       # iOS native code
+├── src/
+│   ├── api/                   # API client and endpoints
+│   │   ├── apiClient.ts       # HTTP client with timeout & error handling
+│   │   └── endpoints.ts       # API endpoint functions
+│   │
+│   ├── assets/                # Images, fonts, etc.
+│   │
+│   ├── components/
+│   │   ├── common/           # Reusable components
+│   │   │   ├── AppText.tsx   # Customizable text component
+│   │   │   ├── Loader.tsx    # Loading indicator
+│   │   │   ├── ErrorView.tsx # Error state component
+│   │   │   └── SearchBar.tsx # Search input component
+│   │   └── list/
+│   │       └── ItemCard.tsx  # Post item component
+│   │
+│   ├── config/               # App configuration
+│   │   ├── api.config.ts    # API settings
+│   │   └── storage.config.ts # Storage keys & settings
+│   │
+│   ├── hooks/                # Custom React hooks
+│   │   ├── useDebounce.ts   # Debounce hook for search
+│   │   ├── useAppLifecycle.ts # App state tracking
+│   │   └── usePagination.ts  # Pagination logic
+│   │
+│   ├── navigation/
+│   │   ├── AppNavigator.tsx  # Navigation setup
+│   │   └── routes.ts         # Route constants
+│   │
+│   ├── screens/
+│   │   ├── HomeScreen.tsx    # Posts listing screen
+│   │   ├── DetailsScreen.tsx # Post detail screen
+│   │   └── ProfileScreen.tsx # User profile screen
+│   │
+│   ├── services/
+│   │   └── storageService.ts # AsyncStorage wrapper
+│   │
+│   ├── store/                # Redux store
+│   │   ├── index.ts         # Store configuration
+│   │   ├── hooks.ts         # Typed Redux hooks
+│   │   ├── middleware/
+│   │   │   └── persistMiddleware.ts # Auto-save to storage
+│   │   └── slices/
+│   │       └── dataSlice.ts  # Posts & users state
+│   │
+│   ├── theme/                # Design tokens
+│   │   ├── colors.ts        # Color palette
+│   │   └── spacing.ts       # Spacing, fonts, etc.
+│   │
+│   ├── types/                # TypeScript types
+│   │   ├── api.types.ts     # API response types
+│   │   ├── navigation.types.ts # Navigation types
+│   │   ├── store.types.ts   # Redux state types
+│   │   └── common.types.ts  # Shared types
+│   │
+│   ├── utils/
+│   │   ├── constants.ts     # App constants
+│   │   └── helpers.ts       # Utility functions
+│   │
+│   └── App.tsx              # Root component
+│
+├── .gitignore
+├── app.json
+├── babel.config.js
+├── index.js
+├── metro.config.js
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-## Step 2: Build and run your app
+## 🚀 Getting Started
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### Prerequisites
 
-### Android
+- Node.js >= 18
+- npm or yarn
+- React Native development environment set up
+  - For iOS: Xcode, CocoaPods
+  - For Android: Android Studio, JDK
 
-```sh
-# Using npm
-npm run android
+### Installation
 
-# OR using Yarn
-yarn android
-```
+1. **Clone the repository**
+   ```bash
+   git clone <https://github.com/ankitatworkz/simplemobileapp.git>
+   cd myApp
+   ```
 
-### iOS
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+3. **Install iOS dependencies** (Mac only)
+   ```bash
+   cd ios && pod install && cd ..
+   ```
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+4. **Start Metro bundler**
+   ```bash
+   npm start
+   # or
+   yarn start
+   ```
 
-```sh
-bundle install
-```
+5. **Run the app**
 
-Then, and every time you update your native dependencies, run:
+   For iOS:
+   ```bash
+   npm run ios
+   # or
+   yarn ios
+   ```
 
-```sh
-bundle exec pod install
-```
+   For Android:
+   ```bash
+   npm run android
+   # or
+   yarn android
+   ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+##  Key Technical Decisions
 
-```sh
-# Using npm
-npm run ios
+### 1. **State Management - Redux Toolkit**
+- **Why**: Predictable state management with excellent TypeScript support
+- **Implementation**: 
+  - Single source of truth for posts and users
+  - Async thunks for API calls
+  - Normalized state structure
+  - Type-safe selectors and actions
 
-# OR using Yarn
-yarn ios
-```
+### 2. **Data Persistence - Redux Persist + AsyncStorage**
+- **Why**: Seamless offline experience and faster app launches
+- **Implementation**:
+  - Automatic state persistence
+  - Custom middleware for selective persistence
+  - Restore data on app launch
+  - Handle app lifecycle states
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### 3. **Performance Optimizations**
+- **FlatList Optimization**:
+  - `keyExtractor` for stable keys
+  - `getItemLayout` for known heights (could be added)
+  - `removeClippedSubviews` for large lists
+  - Memoized render functions
+- **Search Debouncing**: 300ms delay to reduce unnecessary renders
+- **Pagination**: Load 20 items at a time with infinite scroll
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### 4. **Type Safety - TypeScript**
+- Strict mode enabled
+- Comprehensive type definitions for:
+  - API responses
+  - Redux state
+  - Navigation params
+  - Component props
+- Path aliases for cleaner imports
 
-## Step 3: Modify your app
+### 5. **Code Organization**
+- **Feature-based structure**: Related code grouped together
+- **Separation of concerns**: Clear boundaries between layers
+- **Reusable components**: DRY principle applied
+- **Custom hooks**: Shared logic extraction
 
-Now that you have successfully run the app, let's make changes!
+### 6. **Error Handling**
+- API client with timeout and retry logic
+- Error states in Redux
+- User-friendly error messages
+- Retry functionality in UI
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+### 7. **Navigation**
+- Type-safe navigation with TypeScript
+- Native stack navigator for performance
+- Proper param passing between screens
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+##  API Integration
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+**Base URL**: `https://jsonplaceholder.typicode.com`
 
-## Congratulations! :tada:
+### Endpoints Used:
+- `GET /posts` - Fetch posts with pagination
+- `GET /posts/:id` - Fetch single post
+- `GET /users` - Fetch all users
+- `GET /users/:id` - Fetch single user
 
-You've successfully run and modified your React Native App. :partying_face:
+### Features:
+- Request timeout (30 seconds)
+- Retry logic with exponential backoff
+- Network error handling
+- TypeScript typed responses
 
-### Now what?
+##  App Lifecycle Handling
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+The app properly handles all lifecycle states:
 
-# Troubleshooting
+1. **Active State**: Normal operation, data fetching enabled
+2. **Background State**: App minimized, operations paused
+3. **Killed State**: Data persisted, restored on next launch
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+Implementation via:
+- `useAppLifecycle` custom hook
+- Redux Persist for state restoration
+- AsyncStorage for data caching
 
-# Learn More
+##  Data Persistence Strategy
 
-To learn more about React Native, take a look at the following resources:
+### What's Persisted:
+- Posts data
+- Users data
+- Pagination state
+- Search query
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### Storage Keys:
+- Defined in `storage.config.ts`
+- Namespaced to avoid conflicts
+- Versioned for migration support
+
+### Restore Flow:
+1. App launches
+2. Redux Persist rehydrates state
+3. Cached data loaded from AsyncStorage
+4. Fresh data fetched in background
+5. UI updated with latest data
+
+##  Design Decisions
+
+### UI/UX:
+- **Clean, minimalist design** focusing on content
+- **Consistent spacing** using design tokens
+- **Readable typography** with proper hierarchy
+- **Intuitive navigation** with clear back actions
+- **Loading states** for better user feedback
+- **Empty states** with helpful messages
+
+### Accessibility:
+- Semantic component naming
+- Proper text hierarchy
+- Touch target sizes (44px minimum)
+- Color contrast ratios
+
+##  Testing Considerations
+
+While tests aren't included, here's the testing strategy:
+
+### Unit Tests:
+- Utility functions (helpers.ts)
+- Redux reducers and actions
+- Custom hooks
+
+### Integration Tests:
+- API client
+- Redux thunks
+- Component interactions
+
+### E2E Tests:
+- User flows (browse → details → profile)
+- Search functionality
+- Pagination
+
+##  Future Improvements
+
+### Short Term:
+1. **Offline Mode Indicator**: Show when using cached data
+2. **Pull-to-Refresh Animation**: Custom refresh indicator
+3. **Skeleton Loaders**: Better loading experience
+4. **Image Caching**: If images are added
+5. **Error Boundaries**: Graceful error handling
+
+### Medium Term:
+1. **Unit Tests**: Jest + React Native Testing Library
+2. **E2E Tests**: Detox for automated testing
+3. **CI/CD**: Automated builds and deployments
+4. **Analytics**: Track user behavior
+5. **Crash Reporting**: Sentry or similar
+
+### Long Term:
+1. **Dark Mode**: Theme switching
+2. **Localization**: Multi-language support
+3. **Push Notifications**: Real-time updates
+4. **Offline-First**: Full offline functionality
+5. **Advanced Filtering**: Multiple filter options
+
+##  Known Limitations
+
+1. **UI Design**: Functional but basic - focused on code quality
+2. **No Images**: JSONPlaceholder doesn't provide post images
+3. **Limited Filtering**: Only search, no advanced filters
+4. **No Authentication**: Public API, no user auth
+5. **No Caching Strategy**: Simple cache, could be more sophisticated
+
+
+
+---
